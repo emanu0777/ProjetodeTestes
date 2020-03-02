@@ -6,13 +6,24 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.algaworks.desconto.CalculadoraDaPrimeiraFaixa;
+import com.algaworks.desconto.CalculadoraDaSegundaFaixa;
+import com.algaworks.desconto.CalculadoraDaTerceiraFaixa;
+import com.algaworks.desconto.CalculadoraDeFaixaDescontos;
+import com.algaworks.desconto.SemDesconto;
+
 public class PedidoTest {
 
 	private Pedido pedido;
 	
+	
 	@Before
 	public void setup() {
-		pedido = new Pedido();
+		CalculadoraDeFaixaDescontos calculadoraDeFaixa = 
+							new CalculadoraDaTerceiraFaixa(
+									new CalculadoraDaSegundaFaixa(
+											new CalculadoraDaPrimeiraFaixa(new SemDesconto(null))));
+		pedido = new Pedido(calculadoraDeFaixa);
 	}
 	
 	public void assertResumoPedido(double valorTotal, double valorDesconto) {

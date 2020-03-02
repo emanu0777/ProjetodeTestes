@@ -2,15 +2,20 @@ package com.algaworks.pedido;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
+import com.algaworks.desconto.CalculadoraDeFaixaDescontos;
 public class Pedido {
 	
 	private ItemPedido itemPedido;
 	
 	private List<ItemPedido> itens = new ArrayList<ItemPedido>();
 	
+	private CalculadoraDeFaixaDescontos calculadoraDeFaixas;
+	
+	public Pedido(CalculadoraDeFaixaDescontos calculadoraDeFaixa) {
+		this.calculadoraDeFaixas = calculadoraDeFaixa;
+	}
+
 	public void AdicionaItem(ItemPedido itemPedido ) {
 		itens.add(itemPedido);
 	}
@@ -22,19 +27,7 @@ public class Pedido {
 	public ResumoPedido resumo() {
 		
 		 double valorTotal = getValorTotal();
-		 double valorDesconto = 0;
-		
-		if(getValorTotal() > 300 && getValorTotal() <= 800) {
-			valorDesconto = getValorTotal() * 0.04;
-			
-		}else if(getValorTotal()> 800 && getValorTotal() <=1000) {	
-			
-			valorDesconto = getValorTotal() * 0.06;	
-		
-		}else if(getValorTotal() > 1000) {
-			valorDesconto = getValorTotal() * 0.08;
-		}
-		
+		 double valorDesconto = calculadoraDeFaixas.desconto(valorTotal);
 		return new ResumoPedido(valorTotal, valorDesconto);
 	}
 
